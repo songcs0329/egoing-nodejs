@@ -18,11 +18,10 @@ module.exports = {
 	},
 	list: list => {
 		const reducer = list.reduce((acc, cur) => acc += `<li><a href="/?id=${cur}">${cur}</a></li>`, "")
-		return `<ul>
-			${reducer}
-		</ul>`
+		return `<ul>${reducer}</ul>`
 	},
-	body: (path, title, desc) => {
+	body: (title, desc) => `<h2>${title}</h2>${desc}`,
+	form: (path, title, desc) => {
 		if(path === "/create") {
 			return `
 				<form action="/create_process" method="post">
@@ -41,7 +40,6 @@ module.exports = {
 				</form>
 			`
 		}
-		else return `<h2>${title}</h2>${desc}`
 	},
 	controller: (path, title) => {
 		if(path === "/") {

@@ -1,3 +1,5 @@
-dirty <u>html</u>
-
+Dirty <u>html</u>
+<script>
+alert('Dirty')
+</script>
 END

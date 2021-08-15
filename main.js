@@ -20,28 +20,30 @@ const app = http.createServer(async (request, response) => {
 	let title = queryData.id
 	let control = template.controller(pathname, title)
 	let description = await fetch.readFile(queryData.id)
-	title = sanitizeHtml(title)
-	description = sanitizeHtml(description, {
-		allowedTags: ['u', 'b', 'strong']
+	const sanitizedTitle = sanitizeHtml(title)
+	const sanitizedDesc = sanitizeHtml(description, {
+		allowedTags: ['u', 'b', 'strong', 'a', 'p']
 	})
-	let body = template.body(pathname, title, description)
+	let body = template.body(title, sanitizedDesc)
 
 	if(pathname === "/") {
 		if(queryData.id === undefined) {
 			title = "Welcome"
 			control = `<a href="/create">create</a>`
 			description = "Hello Node.js"
-			body = template.body(pathname, title, description)
+			body = `<h2>${title}</h2>${description}`
 		}
-		const component = template.HTML(title, list, control, body)
+		const component = template.HTML(sanitizedTitle, list, control, body)
 		resAction(200, response, component)
 	} else if(pathname === "/create") {
 		title = "WEB - Create"
+		body = template.form(pathname, title, description)
 		const component = template.HTML(title, list, control, body)
 		resAction(200, response, component)
 	} else if(pathname === "/create_process") {
 		fetch.createFile(request, response)
 	} else if(pathname === "/update") {
+		body = template.form(pathname, title, description)
 		const component = template.HTML(title, list, control, body)
 		resAction(200, response, component)
 	} else if(pathname === "/update_process") {
